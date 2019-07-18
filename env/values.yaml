@@ -1,14 +1,29 @@
-expose:
-  Args: 
-    - --v
-    - 4
-  Annotations:
-    helm.sh/hook: post-install,post-upgrade
-    helm.sh/hook-delete-policy: hook-succeeded
-
+PipelineSecrets: {}
 cleanup:
-  Args: 
-    - --cleanup
   Annotations:
     helm.sh/hook: pre-delete
     helm.sh/hook-delete-policy: hook-succeeded
+  Args:
+  - --cleanup
+expose:
+  Annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-delete-policy: hook-succeeded
+  Args:
+  - --v
+  - 4
+  config:
+    domain: 192.168.99.100.nip.io
+    exposer: Ingress
+    http: "true"
+jenkins:
+  Servers:
+    GHE:
+    - Name: GHE
+      Url: https://github-ent.dev.oanda.com/api/v3/
+    - Name: GHE
+      Url: https://github-ent.dev.oanda.com/aku/environment-jx-test-staging.git/api/v3/
+    Global:
+      EnvVars:
+        TILLER_NAMESPACE: kube-system
+prow: {}
